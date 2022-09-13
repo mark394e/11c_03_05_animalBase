@@ -45,16 +45,6 @@ function prepareObjects(jsonData) {
   console.log("prepareObject");
   allAnimals = jsonData.map(prepareObject);
 
-  // if (filter === "cat") {
-  //   const onlyCats = allAnimals.filter(isCat);
-  //   displayList(onlyCats);
-  // } else if (filter === "dog") {
-  //   const onlyDogs = allAnimals.filter(isDog);
-  //   displayList(onlyDogs);
-  // } else {
-  //   displayList(allAnimals);
-  // }
-
   displayList(allAnimals);
 }
 
