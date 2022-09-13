@@ -34,9 +34,16 @@ function selectFilter(event) {
 function selectSort(event) {
   // defines the "sorting by" as the dataset of the button that has been clicked
   const sortBy = event.target.dataset.sort;
+  const sortDir = event.target.dataset.sortDirection;
 
-  // calls the sortList-function with the sortBy-parameter
-  sortList(sortBy);
+  // toggles between ascending or descending sorting direction
+  if (sortDir === "asc") {
+    event.target.dataset.sortDirection = "desc";
+  } else {
+    event.target.dataset.sortDirection = "asc";
+  }
+  // calls the sortList-function with the sortBy- and sortDir-parameter
+  sortList(sortBy, sortDir);
 }
 
 async function loadJSON() {
@@ -94,20 +101,27 @@ function isDog(animal) {
   return animal.type === "dog";
 }
 
-function sortList(sortBy) {
+function sortList(sortBy, sortDir) {
   // by default the sortedList is allAnimals
   let sortedList = allAnimals;
+
+  let direction = 1;
+
+  if (sortDir === "desc") {
+    direction = -1;
+  }
 
   // a new sortedList is made by sorting allAnimals with the sortByProperty-function
   sortedList = sortedList.sort(sortByProperty);
 
   // converts the properties into strings and compare the sequence of UTF-16 code units values in ascending order
+  // by using function-closure it is possible to call the sortBy-variable as the sortByProperty-function is inside the sortList-function
   function sortByProperty(animalA, animalB) {
     // using the sortBy-parameter from the selectSort-function as a "property"
     if (animalA[sortBy] < animalB[sortBy]) {
-      return -1;
+      return -1 * direction;
     } else {
-      return 1;
+      return 1 * direction;
     }
   }
 
