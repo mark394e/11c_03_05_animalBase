@@ -20,7 +20,7 @@ function start() {
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
-  document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
+  document.querySelectorAll("[data-action='sort']").forEach((sort) => sort.addEventListener("click", selectSort));
 }
 
 function selectFilter(event) {
@@ -32,7 +32,7 @@ function selectFilter(event) {
 }
 
 function selectSort(event) {
-  // defines the filter as the dataset of the button that has been clicked
+  // defines the "sorting by" as the dataset of the button that has been clicked
   const sortBy = event.target.dataset.sort;
 
   // calls the sortList-function with the sortBy-parameter
@@ -95,31 +95,23 @@ function isDog(animal) {
 }
 
 function sortList(sortBy) {
+  // by default the sortedList is allAnimals
   let sortedList = allAnimals;
 
-  if (sortBy === "name") {
-    sortedList = sortedList.sort(sortByName);
-  } else if (sortBy === "type") {
-    sortedList = sortedList.sort(sortByType);
+  // a new sortedList is made by sorting allAnimals with the sortByProperty-function
+  sortedList = sortedList.sort(sortByProperty);
+
+  // converts the properties into strings and compare the sequence of UTF-16 code units values in ascending order
+  function sortByProperty(animalA, animalB) {
+    // using the sortBy-parameter from the selectSort-function as a "property"
+    if (animalA[sortBy] < animalB[sortBy]) {
+      return -1;
+    } else {
+      return 1;
+    }
   }
 
   displayList(sortedList);
-}
-
-function sortByName(animalA, animalB) {
-  if (animalA.name < animalB.name) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortByType(animalA, animalB) {
-  if (animalA.type < animalB.type) {
-    return -1;
-  } else {
-    return 1;
-  }
 }
 
 function displayList(animals) {
