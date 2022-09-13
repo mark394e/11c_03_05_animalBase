@@ -14,22 +14,20 @@ const Animal = {
 
 function start() {
   console.log("ready");
-
-  // TODO: Add event-listeners to filter and sort buttons
-  document.querySelector("[data-filter=cat]").addEventListener("click", catFilter);
-  document.querySelector("[data-filter=dog]").addEventListener("click", dogFilter);
-  document.querySelector("[data-filter=all]").addEventListener("click", loadJSON);
+  registerButtons();
   loadJSON();
 }
 
-function catFilter() {
-  const onlyCats = allAnimals.filter(isCat);
-  displayList(onlyCats);
+function registerButtons() {
+  document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
 }
 
-function dogFilter() {
-  const onlyDogs = allAnimals.filter(isDog);
-  displayList(onlyDogs);
+function selectFilter(event) {
+  // defines the filter as the dataset of the button that has been clicked
+  const filter = event.target.dataset.filter;
+
+  // calls the filterList-function with the filter-parameter
+  filterList(filter);
 }
 
 async function loadJSON() {
@@ -48,22 +46,6 @@ function prepareObjects(jsonData) {
   displayList(allAnimals);
 }
 
-function isCat(animal) {
-  console.log("isCat");
-  if (animal.type === "cat") {
-    return true;
-  }
-  return false;
-}
-
-function isDog(animal) {
-  console.log("isDog");
-  if (animal.type === "dog") {
-    return true;
-  }
-  return false;
-}
-
 function prepareObject(jsonObject) {
   const animal = Object.create(Animal);
 
@@ -74,6 +56,33 @@ function prepareObject(jsonObject) {
   animal.age = jsonObject.age;
 
   return animal;
+}
+
+function filterList(filterBy) {
+  // by default the filteredList is allAnimals
+  let filteredList = allAnimals;
+
+  // if the filter is set to "cat" then filter the allAnimals-list with the isCat-function
+  if (filterBy === "cat") {
+    filteredList = allAnimals.filter(isCat);
+  }
+  // if the filter is set to "dog" then filter the allAnimals-list with the isDog-function
+  else if (filterBy === "dog") {
+    filteredList = allAnimals.filter(isDog);
+  }
+
+  // call the displayList-function with the filteredList as a parameter
+  displayList(filteredList);
+}
+
+function isCat(animal) {
+  // returns all the animals which has the value of cat in its type-property
+  return animal.type === "cat";
+}
+
+function isDog(animal) {
+  // returns all the animals which has the value of dog in its type-property
+  return animal.type === "dog";
 }
 
 function displayList(animals) {
