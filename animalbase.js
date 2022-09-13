@@ -20,6 +20,7 @@ function start() {
 
 function registerButtons() {
   document.querySelectorAll("[data-action='filter']").forEach((button) => button.addEventListener("click", selectFilter));
+  document.querySelectorAll("[data-action='sort']").forEach((button) => button.addEventListener("click", selectSort));
 }
 
 function selectFilter(event) {
@@ -28,6 +29,14 @@ function selectFilter(event) {
 
   // calls the filterList-function with the filter-parameter
   filterList(filter);
+}
+
+function selectSort(event) {
+  // defines the filter as the dataset of the button that has been clicked
+  const sortBy = event.target.dataset.sort;
+
+  // calls the sortList-function with the sortBy-parameter
+  sortList(sortBy);
 }
 
 async function loadJSON() {
@@ -83,6 +92,34 @@ function isCat(animal) {
 function isDog(animal) {
   // returns all the animals which has the value of dog in its type-property
   return animal.type === "dog";
+}
+
+function sortList(sortBy) {
+  let sortedList = allAnimals;
+
+  if (sortBy === "name") {
+    sortedList = sortedList.sort(sortByName);
+  } else if (sortBy === "type") {
+    sortedList = sortedList.sort(sortByType);
+  }
+
+  displayList(sortedList);
+}
+
+function sortByName(animalA, animalB) {
+  if (animalA.name < animalB.name) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortByType(animalA, animalB) {
+  if (animalA.type < animalB.type) {
+    return -1;
+  } else {
+    return 1;
+  }
 }
 
 function displayList(animals) {
