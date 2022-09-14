@@ -234,6 +234,8 @@ function tryToMakeAWinner(selectedAnimal) {
     document.querySelector("#remove_other .closebutton").addEventListener("click", closeDialog);
     document.querySelector("#remove_other #removeother").addEventListener("click", clickRemoveOther);
 
+    document.querySelector("#remove_other [data-field=otherwinner]").textContent = other.name;
+
     // if exit button is clicked then add hide to warning-box, and remove the eventlisteners
     function closeDialog() {
       document.querySelector("#remove_other").classList.add("hide");
@@ -256,6 +258,10 @@ function tryToMakeAWinner(selectedAnimal) {
     document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeDialog);
     document.querySelector("#remove_aorb #removea").addEventListener("click", clickRemoveA);
     document.querySelector("#remove_aorb #removeb").addEventListener("click", clickRemoveB);
+
+    // show names on buttons
+    document.querySelector("#remove_aorb [data-field=winnerA]").textContent = winnerA.name;
+    document.querySelector("#remove_aorb [data-field=winnerB]").textContent = winnerB.name;
 
     function closeDialog() {
       document.querySelector("#remove_aorb").classList.add("hide");
