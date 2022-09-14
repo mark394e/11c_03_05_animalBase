@@ -4,6 +4,12 @@ window.addEventListener("DOMContentLoaded", start);
 
 let allAnimals = [];
 
+const settings = {
+  filter: "all",
+  sortBy: "name",
+  sortDir: "asc",
+};
+
 // The prototype for all animals:
 const Animal = {
   name: "",
@@ -28,7 +34,12 @@ function selectFilter(event) {
   const filter = event.target.dataset.filter;
 
   // calls the filterList-function with the filter-parameter
-  filterList(filter);
+  setFilter(filter);
+}
+
+function setFilter(filter) {
+  settings.filterBy = filter;
+  buildList();
 }
 
 function selectSort(event) {
@@ -43,7 +54,13 @@ function selectSort(event) {
     event.target.dataset.sortDirection = "asc";
   }
   // calls the sortList-function with the sortBy- and sortDir-parameter
-  sortList(sortBy, sortDir);
+  setSort(sortBy, sortDir);
+}
+
+function setSort(sortBy, sortDir) {
+  settings.sortBy = sortBy;
+  settings.sortDir = sortDir;
+  buildList();
 }
 
 async function loadJSON() {
@@ -74,21 +91,21 @@ function prepareObject(jsonObject) {
   return animal;
 }
 
-function filterList(filterBy) {
+function filterList(filteredList) {
   // by default the filteredList is allAnimals
-  let filteredList = allAnimals;
+  // let filteredList = allAnimals;
 
   // if the filter is set to "cat" then filter the allAnimals-list with the isCat-function
-  if (filterBy === "cat") {
+  if (settings.filterBy === "cat") {
     filteredList = allAnimals.filter(isCat);
   }
   // if the filter is set to "dog" then filter the allAnimals-list with the isDog-function
-  else if (filterBy === "dog") {
+  else if (settings.filterBy === "dog") {
     filteredList = allAnimals.filter(isDog);
   }
 
   // call the displayList-function with the filteredList as a parameter
-  displayList(filteredList);
+  return filteredList;
 }
 
 function isCat(animal) {
@@ -101,13 +118,13 @@ function isDog(animal) {
   return animal.type === "dog";
 }
 
-function sortList(sortBy, sortDir) {
+function sortList(sortedList) {
   // by default the sortedList is allAnimals
-  let sortedList = allAnimals;
+  // let sortedList = allAnimals;
 
   let direction = 1;
 
-  if (sortDir === "desc") {
+  if (settings.sortDir === "desc") {
     direction = -1;
   }
 
@@ -118,13 +135,19 @@ function sortList(sortBy, sortDir) {
   // by using function-closure it is possible to call the sortBy-variable as the sortByProperty-function is inside the sortList-function
   function sortByProperty(animalA, animalB) {
     // using the sortBy-parameter from the selectSort-function as a "property"
-    if (animalA[sortBy] < animalB[sortBy]) {
+    if (animalA[settings.sortBy] < animalB[settings.sortBy]) {
       return -1 * direction;
     } else {
       return 1 * direction;
     }
   }
 
+  return sortedList;
+}
+
+function buildList() {
+  const currentList = filterList(allAnimals);
+  const sortedList = sortList(currentList);
   displayList(sortedList);
 }
 
